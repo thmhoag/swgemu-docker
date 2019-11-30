@@ -1,17 +1,7 @@
-FROM ubuntu:16.04
+FROM swgemu:test
 
-RUN apt-get update
-RUN apt-get install -y build-essential \
-    libmysqlclient-dev \
-    liblua5.3-dev \
-    libdb5.3-dev \
-    libssl-dev \
-    cmake \
-    git \
-    default-jre
+COPY scripts /app/scripts
+RUN ln -s /app/scripts/swgemu.sh /usr/bin/swgemu
 
-WORKDIR /app
-COPY . .
-
-WORKDIR /app/MMOCoreORB
-RUN make -j8
+WORKDIR /app/MMOCoreORB/bin
+RUN /app/scripts/run.sh
