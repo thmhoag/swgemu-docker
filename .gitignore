@@ -1,3 +1,5 @@
+**.vscode/
+
 tre/*.tre
 log/*
 !log/.gitkeep
