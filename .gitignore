@@ -1,0 +1,3 @@
+tre/*.tre
+log/*
+!log/.gitkeep

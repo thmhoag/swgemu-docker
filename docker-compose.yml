@@ -1,0 +1,54 @@
+version: '3'
+
+volumes:
+  mysql:
+  database:
+  navmeshes:
+  log:
+
+services:
+  database:
+    image: mysql:5.7.28
+    hostname: swgemu_database
+    container_name: swgemu_database
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=swgemuroot
+      - MYSQL_DATABASE=swgemu
+      - MYSQL_USER=swgemu
+      - MYSQL_PASSWORD=swgemu-sql
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: always
+
+  swgemu:
+    depends_on:
+      - database
+    image: swgemu:test
+    hostname: swgemu_server
+    container_name: swgemu_server
+    working_dir: /app/MMOCoreORB/bin
+    command: ./core3
+    stdin_open: true
+    tty: true
+    ports:
+      - "44419:44419"
+      - "44419:44419/udp"
+      - "44453:44453"
+      - "44453:44453/udp"
+      - "44462:44462"
+      - "44462:44462/udp"
+      - "44463:44463"
+      - "44463:44463/udp"
+      - "44455:44455"
+      - "44455:44455/udp"
+      - "44460:44460"
+    volumes:
+      - ${PWD}/tre:/home/swgemu/Desktop/SWGEmu
+      - ${PWD}/conf:/app/MMOCoreORB/bin/conf
+      - ${PWD}/custom_scripts:/app/MMOCoreORB/bin/scripts/custom_scripts
+      - log:/app/MMOCoreORB/bin/log
+      - navmeshes:/app/MMOCoreORB/bin/navmeshes
+      - database:/app/MMOCoreORB/bin/databases
+    restart: always
