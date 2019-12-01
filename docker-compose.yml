@@ -26,13 +26,9 @@ services:
   swgemu:
     depends_on:
       - database
-    image: swgemu:test
+    image: swgemu:dev
     hostname: swgemu_server
     container_name: swgemu_server
-    working_dir: /app/MMOCoreORB/bin
-    command: ./core3
-    stdin_open: true
-    tty: true
     ports:
       - "44419:44419"
       - "44419:44419/udp"
@@ -52,4 +48,5 @@ services:
       - log:/app/MMOCoreORB/bin/log
       - navmeshes:/app/MMOCoreORB/bin/navmeshes
       - database:/app/MMOCoreORB/bin/databases
+    stop_grace_period: 1m
     restart: always
