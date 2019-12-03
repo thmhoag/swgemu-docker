@@ -26,6 +26,7 @@ services:
   swgemu:
     depends_on:
       - database
+    build: .
     image: swgemu:dev
     hostname: swgemu_server
     container_name: swgemu_server
