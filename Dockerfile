@@ -1,14 +1,24 @@
-FROM ubuntu:16.04
+# Create base image with dependencies
+# needed by both builder and final
+FROM ubuntu:16.04 as base-image
 
 RUN apt-get update
 RUN apt-get install -y build-essential \
     libmysqlclient-dev \
     liblua5.3-dev \
     libdb5.3-dev \
-    libssl-dev \
-    cmake \
+    libssl-dev
+
+
+# Create builder image from base and add
+# needed items for building the project
+FROM base-image as builder
+RUN apt-get install -y cmake \
     git \
-    default-jre
+    default-jre \
+    curl
+
+RUN curl -L https://github.com/krallin/tini/releases/download/v0.18.0/tini -o /usr/bin/tini
 
 WORKDIR /app
 COPY ./Core3 .
@@ -25,13 +35,19 @@ RUN sed -i 's/..\/..\/Core3\///' .git/modules/MMOCoreORB/utils/engine3/config &&
 WORKDIR /app/MMOCoreORB
 RUN make -j4
 
-ADD https://github.com/krallin/tini/releases/download/v0.18.0/tini /usr/bin/tini
+
+# Create final image that could be used as a 
+# lighter-weight production image
+FROM base-image as final
+
+COPY --from=builder /usr/bin/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
+
+WORKDIR /app/MMOCoreORB/bin
+COPY --from=builder /app/MMOCoreORB/bin .
 
 COPY scripts /app/scripts
 RUN ln -s /app/scripts/swgemu.sh /usr/bin/swgemu
-
-WORKDIR /app/MMOCoreORB/bin
 
 # tini is needed as core3 does not explicitly handle SIGTERM signals
 ENTRYPOINT ["tini", "--"]
