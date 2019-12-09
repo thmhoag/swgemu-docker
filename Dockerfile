@@ -12,11 +12,17 @@ RUN apt-get install -y build-essential \
 
 # Create builder image from base and add
 # needed items for building the project
-FROM base-image as builder
+FROM base-image as build-image
 RUN apt-get install -y cmake \
+    ninja-build \
     git \
     default-jre \
     curl
+
+# builder image to build Core3
+# this is separate to facilicate using
+# the prior layer for local development
+FROM build-image as builder
 
 RUN curl -L https://github.com/krallin/tini/releases/download/v0.18.0/tini -o /usr/bin/tini
 
@@ -33,8 +39,7 @@ RUN sed -i 's/..\/..\/Core3\///' .git/modules/MMOCoreORB/utils/engine3/config &&
     sed -i 's/..\/.git\/modules\/Core3\//.git\//' MMOCoreORB/utils/engine3/.git
 
 WORKDIR /app/MMOCoreORB
-RUN make -j4
-
+RUN make build-ninja-debug
 
 # Create final image that could be used as a 
 # lighter-weight production image
