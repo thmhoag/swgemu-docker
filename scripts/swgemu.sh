@@ -61,16 +61,11 @@ server_start() {
 
     trap 'graceful_shutdown;' SIGINT SIGTERM
     
-    (./core3 < /tmp/swgemu-input) &
-    echo "** core3 started **"
-
     (sleep infinity > /tmp/swgemu-input) &
-    wait
-
-    # wait
-    # local core3pid=$!
-    # wait $core3pid
-    # sleep infinity
+    (./core3 < /tmp/swgemu-input) &
+    local core3pid=$!
+    echo "** core3 started (pid: $core3pid) **"
+    wait $core3pid
 }
 
 server_shutdown() {

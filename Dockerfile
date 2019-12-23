@@ -2,13 +2,14 @@
 # needed by both builder and final
 FROM ubuntu:16.04 as base-image
 
-RUN apt-get update
-RUN apt-get install -y build-essential \
+RUN apt-get update && apt-get install -y build-essential \
     libmysqlclient-dev \
     liblua5.3-dev \
     libdb5.3-dev \
     libssl-dev
 
+COPY scripts /app/scripts
+RUN ln -s /app/scripts/swgemu.sh /usr/bin/swgemu
 
 # Create builder image from base and add
 # needed items for building the project
@@ -50,9 +51,6 @@ RUN chmod a+x /usr/bin/tini
 
 WORKDIR /app/MMOCoreORB/bin
 COPY --from=builder /app/MMOCoreORB/bin .
-
-COPY scripts /app/scripts
-RUN ln -s /app/scripts/swgemu.sh /usr/bin/swgemu
 
 # tini is needed as core3 does not explicitly handle SIGTERM signals
 ENTRYPOINT ["tini", "--"]
