@@ -20,7 +20,7 @@ services:
       - MYSQL_PASSWORD=swgemu-sql
     volumes:
       - mysql:/var/lib/mysql
-      - ${PWD}/sql:/docker-entrypoint-initdb.d
+      - ./sql:/docker-entrypoint-initdb.d
     restart: always
 
   swgemu:
@@ -43,9 +43,9 @@ services:
       - "44455:44455/udp"
       - "44460:44460"
     volumes:
-      - ${PWD}/tre:/home/swgemu/Desktop/SWGEmu
-      - ${PWD}/conf:/app/MMOCoreORB/bin/conf
-      - ${PWD}/custom_scripts:/app/MMOCoreORB/bin/scripts/custom_scripts
+      - ./tre:/home/swgemu/Desktop/SWGEmu
+      - ./conf:/app/MMOCoreORB/bin/conf
+      - ./custom_scripts:/app/MMOCoreORB/bin/scripts/custom_scripts
       - log:/app/MMOCoreORB/bin/log
       - navmeshes:/app/MMOCoreORB/bin/navmeshes
       - database:/app/MMOCoreORB/bin/databases
