@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y build-essential \
     libmysqlclient-dev \
     liblua5.3-dev \
     libdb5.3-dev \
-    libssl-dev
+    libssl-dev \
+    libboost-all-dev
 
 COPY scripts /app/scripts
 RUN ln -s /app/scripts/swgemu.sh /usr/bin/swgemu
