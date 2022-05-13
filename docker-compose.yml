@@ -1,11 +1,5 @@
 version: '3'
 
-volumes:
-  mysql:
-  database:
-  navmeshes:
-  log:
-
 services:
   database:
     image: mysql:5.7.28
@@ -19,7 +13,7 @@ services:
       - MYSQL_USER=swgemu
       - MYSQL_PASSWORD=swgemu-sql
     volumes:
-      - mysql:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d
     restart: always
 
@@ -45,9 +39,10 @@ services:
     volumes:
       - ./tre:/home/swgemu/Desktop/SWGEmu
       - ./conf:/app/MMOCoreORB/bin/conf
-      - ./custom_scripts:/app/MMOCoreORB/bin/scripts/custom_scripts
-      - log:/app/MMOCoreORB/bin/log
-      - navmeshes:/app/MMOCoreORB/bin/navmeshes
-      - database:/app/MMOCoreORB/bin/databases
+      - ./Core3/MMOCoreORB/bin/scripts:/app/MMOCoreORB/bin/scripts
+      - ./resource_manager/resource_manager_spawns.lua:/app/MMOCoreORB/bin/scripts/managers/resource_manager_spawns.lua
+      - ./log:/app/MMOCoreORB/bin/log
+      - ./navmeshes:/app/MMOCoreORB/bin/navmeshes
+      - ./databases:/app/MMOCoreORB/bin/databases
     stop_grace_period: 1m
     restart: always
