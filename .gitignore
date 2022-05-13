@@ -10,3 +10,6 @@ databases/*
 !databases/.gitkeep
 navmeshes/*
 !navmeshes/.gitkeep
+
+# this is ignored because it will be changed by the server
+resource_manager/resource_manager_spawns.lua
