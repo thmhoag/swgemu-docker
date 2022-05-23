@@ -35,6 +35,9 @@ A list of the required files can be found in the [./Core3/MMOCoreORB/bin/conf/co
 
 The image can be built using `docker-compose` or manually using `Docker`.
 
+> **NOTE**: Before building, ensure you have updated both submodules (Core3 and subsequently engine3). <br>
+> ie. ```git submodule update --init --recursive```
+
 docker-compose:
 ```$bash
 $ docker-compose build
